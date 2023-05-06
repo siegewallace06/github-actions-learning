@@ -1,0 +1,45 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: Java CI with Gradle
+
+# Name of Event(s) that trigger(s) the workflow
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+# Below is the part that is executed when an event happened
+jobs:
+# Name of the Job (We can name it with anything)
+  build:
+
+    runs-on: ubuntu-latest
+
+    # Steps are sequence of tasks
+    steps:
+    # First, we checkout the code
+    - uses: actions/checkout@v3
+    # Prepare Java Environment with defined version
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+    # Action to Build with Gradle
+    - name: Build with Gradle
+      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      with:
+        arguments: build
+    # Notify Telegram for Test CI/CD
+    - name: Send Message to Telegram
+      run: curl -v -F "chat_id=-899266124" -F "text=[CI/CD TESTING] Someone Push or create PR on the master branch. This is a Testing Message, please ignore - Eryanto" https://api.telegram.org/bot5964340318:AAEVk22-qp78Kispg_u-dPfnT4qURzFsmNU/sendMessage
+
