@@ -27,7 +27,7 @@ jobs:
     # Steps are sequence of tasks
     steps:
     # First, we checkout the code
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v2
     # Prepare Java Environment with defined version
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
@@ -40,6 +40,7 @@ jobs:
     # Build with Gradle
     - name: Build with Gradle
       run: ./gradlew build
+
     # Notify Telegram for Test CI/CD
     - name: Send Build Success Notification to Telegram
       run: curl -v -F "chat_id=${{ secrets.PATAR_ROOM_ID }}" -F "text=[CI/CD TESTING] The Code has been built successfully!. This is a Testing Message, please ignore - Eryanto" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage
@@ -51,6 +52,7 @@ jobs:
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
+        tags: latest
     # Notify Telegram for Docker Image Build Success
     - name: Send Docker Image Build Success Notification to Telegram
       run: curl -v -F "chat_id=${{ secrets.PATAR_ROOM_ID }}" -F "text=[CI/CD TESTING] The Docker Image has been built and pushed to siegewallace06/demo-ci-cd-app successfully!. This is a Testing Message, please ignore - Eryanto" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage
