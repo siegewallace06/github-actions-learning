@@ -48,11 +48,12 @@ jobs:
     - name: Build and Push Docker Image to Docker Hub
       uses: mr-smithers-excellent/docker-build-push@v4
       with:
+        context: .
         image: siegewallace06/demo-ci-cd-app
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        tags: latest
+        tag: latest
     # Notify Telegram for Docker Image Build Success
     - name: Send Docker Image Build Success Notification to Telegram
       run: curl -v -F "chat_id=${{ secrets.PATAR_ROOM_ID }}" -F "text=[CI/CD TESTING] The Docker Image has been built and pushed to siegewallace06/demo-ci-cd-app successfully!. This is a Testing Message, please ignore - Eryanto" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage
