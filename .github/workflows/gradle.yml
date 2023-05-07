@@ -54,6 +54,7 @@ jobs:
         STAGING_PORT: ${{ secrets.STAGING_PORT }}
       run: |
         sshpass -p $STAGING_PASSWORD ssh -o StrictHostKeyChecking=no -p $STAGING_PORT $STAGING_USERNAME@$STAGING_SERVER "
+        pwd
         $HOME/eryanto_logs/test.sh
         "
 
