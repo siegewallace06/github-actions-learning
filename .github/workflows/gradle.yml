@@ -56,7 +56,7 @@ jobs:
         sshpass -p $STAGING_PASSWORD ssh -o StrictHostKeyChecking=no -p $STAGING_PORT $STAGING_USERNAME@$STAGING_SERVER "
         pwd
         ls -lrt
-        $HOME/eryanto_logs/test.sh
+        /home/$STAGING_USERNAME/eryanto_logs/test.sh
         "
 
 
