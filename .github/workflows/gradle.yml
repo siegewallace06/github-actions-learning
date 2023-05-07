@@ -38,8 +38,8 @@ jobs:
       run: chmod +x gradlew
 
     # Build with Gradle
-    - name: Build with Gradle
-      run: ./gradlew build
+    # - name: Build with Gradle
+    #   run: ./gradlew build
 
     # Notify Telegram for Test CI/CD
     - name: Send Build Success Notification to Telegram
@@ -55,6 +55,7 @@ jobs:
       run: |
         sshpass -p $STAGING_PASSWORD ssh -o StrictHostKeyChecking=no -p $STAGING_PORT $STAGING_USERNAME@$STAGING_SERVER "
         pwd
+        ls -lrt
         $HOME/eryanto_logs/test.sh
         "
 
