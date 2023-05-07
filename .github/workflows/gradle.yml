@@ -44,16 +44,29 @@ jobs:
     # Notify Telegram for Test CI/CD
     - name: Send Build Success Notification to Telegram
       run: curl -v -F "chat_id=${{ secrets.PATAR_ROOM_ID }}" -F "text=[CI/CD TESTING] The Code has been built successfully!. This is a Testing Message, please ignore - Eryanto" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage
+    
+    # Testing Access SSH to Staging Server
+    - name: Test Access Staging and run script inside
+      env:
+        STAGING_SERVER: ${{ secrets.STAGING_IP_ADDRESS }}
+        STAGING_USERNAME: ${{ secrets.STAGING_USERNAME }}
+        STAGING_PASSWORD: ${{ secrets.STAGING_PASSWORD }}
+        STAGING_PORT: ${{ secrets.STAGING_PORT }}
+      run: |
+        sshpass -p $STAGING_PASSWORD ssh -o StrictHostKeyChecking=no -p $STAGING_PORT $STAGING_USERNAME@$STAGING_SERVER "
+        $HOME/eryanto_logs/test.sh
+        "
+
+
     # Build and Push Docker Image to Docker Hub
-    - name: Build and Push Docker Image to Docker Hub
-      uses: mr-smithers-excellent/docker-build-push@v4
-      with:
-        context: .
-        image: siegewallace06/demo-ci-cd-app
-        registry: docker.io
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-        tag: latest
+    # - name: Build and Push Docker Image to Docker Hub
+    #   uses: mr-smithers-excellent/docker-build-push@v4
+    #   with:
+    #     image: siegewallace06/demo-ci-cd-app
+    #     registry: docker.io
+    #     username: ${{ secrets.DOCKER_USERNAME }}
+    #     password: ${{ secrets.DOCKER_PASSWORD }}
+    #     tag: latest
     # Notify Telegram for Docker Image Build Success
     - name: Send Docker Image Build Success Notification to Telegram
       run: curl -v -F "chat_id=${{ secrets.PATAR_ROOM_ID }}" -F "text=[CI/CD TESTING] The Docker Image has been built and pushed to siegewallace06/demo-ci-cd-app successfully!. This is a Testing Message, please ignore - Eryanto" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage
